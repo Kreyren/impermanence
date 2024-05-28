@@ -195,6 +195,14 @@
     attribute set of submodules, where the attribute name is the path
     to persistent storage.
 
+    The impermanence module is **disabled** by default to enable programming logic for complex setups and has to be globally enabled when imported. To enable impermanence, use:
+
+    #+begin_src nix
+      {
+        boot.impermanence.enable = false;
+      }
+    #+end_src
+
     Usage is shown best with an example:
 
     #+begin_src nix

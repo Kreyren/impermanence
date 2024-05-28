@@ -2,6 +2,7 @@
 
 with lib;
 let
+  enableCfg = config.home.impermanence.enable;
   cfg = config.home.persistence;
 
   persistentStorageNames = attrNames cfg;
@@ -41,6 +42,13 @@ in
 {
   options = {
 
+    home.impermanence.enable = mkOption {
+      type = types.bool;
+      description = ''
+        Whether to enable impermanence for home-manager.
+      '';
+      default = false;
+    };
     home.persistence = mkOption {
       default = { };
       type = with types; attrsOf (
@@ -197,7 +205,7 @@ in
 
   };
 
-  config = {
+  config = lib.mkIf enableCfg {
     home.file =
       let
         link = file:

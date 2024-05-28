@@ -44,6 +44,7 @@ let
     ;
 
   cfg = config.environment.persistence;
+  enableCfg = config.boot.impermanence.enable;
   users = config.users.users;
   allPersistentStoragePaths = { directories = [ ]; files = [ ]; users = [ ]; }
     // (zipAttrsWith (_name: flatten) (filter (v: v.enable) (attrValues cfg)));
@@ -72,6 +73,13 @@ in
 {
   options = {
 
+    boot.impermanence.enable = mkOption {
+      type = types.bool;
+      description = ''
+        Whether to enable impermanence.
+      '';
+      default = false;
+    };
     environment.persistence = mkOption {
       default = { };
       type =
@@ -477,7 +485,7 @@ in
     virtualisation.fileSystems = mkOption { };
   };
 
-  config = {
+  config = lib.mkIf enableCfg {
     systemd.services =
       let
         mkPersistFileService = { filePath, persistentStoragePath, enableDebugging, ... }:
